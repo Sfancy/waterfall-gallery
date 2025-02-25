@@ -10,8 +10,5 @@
   "scripts": {
     "start": "bun run index.ts"
   },
-  "type": "module",
-  "dependencies": {
-    "solid-js": "^1.9.5"
-  }
+  "type": "module"
 }
