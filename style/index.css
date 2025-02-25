@@ -1,0 +1,70 @@
+*,
+:after,
+:before,
+::backdrop {
+  box-sizing: border-box;
+  border: 0 solid;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --image-max-width: 720px;
+}
+
+body {
+  min-height: 100vh;
+  --color-gray-950: oklch(0.13 0.028 261.692);
+  --pattern-fg: color-mix(in oklab, var(--color-gray-950) 5%, transparent);
+  background-image: repeating-linear-gradient(
+    315deg,
+    var(--pattern-fg) 0,
+    var(--pattern-fg) 1px,
+    transparent 0,
+    transparent 50%
+  );
+  background-attachment: fixed;
+  background-size: 10px 10px;
+}
+.container {
+  max-width: var(--image-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.container img {
+  max-width: 100%;
+}
+
+.container ol,
+.container ul {
+  list-style: none;
+}
+
+.container ol li,
+.container ul li {
+  padding: 8px;
+}
+
+.container ol li:not(:last-of-type),
+.container ul li:not(:last-of-type) {
+  border-color: color-mix(in oklab, var(--color-gray-950) 5%, transparent);
+  border-bottom-style: solid;
+}
+
+.folder-item {
+  display: flex;
+  gap: 5px;
+}
+
+.container ol li a,
+.container ul li a {
+  color: #111;
+  text-decoration: none;
+}
+
+.container ol li a:hover,
+.container ul li a:hover {
+  color: oklch(0.623 0.214 259.815);
+}

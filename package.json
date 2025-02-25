@@ -1,0 +1,17 @@
+{
+  "name": "comics",
+  "module": "index.ts",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "start": "bun run index.ts"
+  },
+  "type": "module",
+  "dependencies": {
+    "solid-js": "^1.9.5"
+  }
+}
