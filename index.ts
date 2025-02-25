@@ -1,4 +1,4 @@
-import { readdir } from "node:fs/promises";
+import { constants, access, readdir } from "node:fs/promises";
 import homepage from "./index.html";
 import path from "node:path";
 
@@ -26,12 +26,23 @@ const server = Bun.serve({
   routes: {
     "/homepage": homepage,
     "/": async () => {
+      if (!DATA_PATH) {
+        return new Response("Empty data path found in .env file.", {
+          status: 404,
+        });
+      }
+      try {
+        await access(DATA_PATH, constants.R_OK);
+      } catch (error) {
+        return new Response(`Unable to access ${DATA_PATH}`, {
+          status: 500,
+        });
+      }
       const allFiles = await readdir(DATA_PATH);
       const menu = allFiles.filter((m) => !m.startsWith("."));
       menu.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
       const htmlContent = getHtmlContent(
-        `<ul>
-          <li><a href="/homepage">Homepage</a></li>
+        `<ul class="menu">
         ${menu
           .map(
             (m) =>
@@ -63,7 +74,9 @@ const server = Bun.serve({
       });
     },
     "/images/:folder/:name": (req) => {
-      const file = Bun.file(`./data/${req.params.folder}/${req.params.name}`);
+      const file = Bun.file(
+        path.join(DATA_PATH, req.params.folder, req.params.name)
+      );
       return new Response(file);
     },
     "/style/:name": (req) => {
