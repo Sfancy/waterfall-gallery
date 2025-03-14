@@ -1,12 +1,21 @@
 import { useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Trash2 } from "lucide-react";
+import { Home, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default function Folder() {
-  const [height, setHeight] = useState(48);
+  const [height, setHeight] = useState([50]);
   let { folder } = useParams();
   const { data, error, isLoading, refetch } = useQuery<string[], Error>({
     queryKey: [folder],
@@ -52,22 +61,37 @@ export default function Folder() {
   };
 
   return (
-    <div className="container mx-auto">
-      <input
-        type="range"
-        name=""
-        id=""
-        min={1}
-        max={100}
-        value={height}
-        onChange={(e) => setHeight(Number(e.target.value))}
-      />
-      <div className="max-w-md flex flex-col flex-wrap sm:flex-row">
+    <div className="container mx-auto md:mt-4">
+      <div className="w-full py-4 flex items-center justify-between">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to="/" className="flex items-center gap-2">
+                  <Home width={16} height={16} />
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{folder}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <Slider
+          className="ml-auto max-w-md"
+          value={height}
+          onValueChange={(v) => setHeight(v)}
+          max={100}
+          step={1}
+        />
+      </div>
+      <div className="flex flex-col flex-wrap sm:flex-row">
         {data?.map((d) => (
           <div
             key={d}
             className="relative group"
-            style={{ height: `${height * 10}px` }}
+            style={{ height: `${height[0] * 10}px` }}
           >
             <div className="h-full ease-curve-c relative mx-auto overflow-hidden transition-opacity rounded-md [&_img]:scale-100 [&_img]:transform-gpu [&_video]:transform-gpu [&_img]:transition-transform [&_img]:duration-300 [&_video]:transition-transform [&_video]:duration-200 group-hover:[&_img]:scale-[1.025] group-hover:[&_video]:scale-[1.025]">
               <img src={`/media/${folder}/${d}`} className="h-full w-auto" />
@@ -80,8 +104,6 @@ export default function Folder() {
               >
                 <Trash2 />
               </Button>
-              {/* <div className="relative w-full">
-            </div> */}
             </div>
           </div>
         ))}

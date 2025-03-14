@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, FolderOpen } from "lucide-react";
 import { Link } from "react-router";
 
-export default function Gallery() {
+export default function Page() {
   const { data, error, isLoading } = useQuery<string[], Error>({
     queryKey: ["media"],
     queryFn: async () => {
